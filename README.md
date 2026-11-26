@@ -1,53 +1,62 @@
 # SEPEHR FAST BREAK
 
-مود کلاینت‌ساید Fabric برای **Minecraft 1.21.11** — شکستن فوق‌سریع بلوک‌ها با منوی تنظیم قدرت ماین داخل بازی.
+مود کلاینت‌ساید Fabric برای **Minecraft 1.21.11** — دو بخش: موتور Fast Break و **پنل Performance**.
 
-## امکانات
+## بخش ۱: Fast Break
 
-- **قدرت ماین قابل تنظیم از ۱ تا ۵۰** با اسلایدر داخل بازی
-- دکمه روشن/خاموش کردن مود در همان منو
-- کلید میان‌بر پیش‌فرض: **G** (قابل تغییر در Options → Controls)
-- ذخیره‌ی خودکار تنظیمات در `config/sepehr-fastbreak.json`
-- ترجمه‌ی فارسی و انگلیسی
+- شکستن فوق‌سریع بلوک با قدرت قابل تنظیم **x1 تا x100**
+- منوی تنظیمات با کلید **G**: اسلایدر قدرت، پریست‌های x1/x10/x25/x100، روشن/خاموش
+- وقتی سرور پیشرفت شکستن را reset کند، موتور بلافاصله حمله را از نو آغاز می‌کند
+- ذخیره تنظیمات در `config/sepehr-fastbreak.json`
 
-## کارکرد فنی
+## بخش ۲: Performance Control Panel (کلید P)
 
-مود در هر تیکِ کلاینت، وقتی کلید چپ‌کلیک نگه‌داشته شده و روی بلوکی نشانه رفته باشی،
-به تعداد «قدرت ماین» منهای ۱، فراخوانی اضافه روی `updateBlockBreakingProgress` انجام می‌دهد؛
-بنابراین سرعت شکستن تقریباً به همین نسبت بالا می‌رود. این روش بدون Mixin و بدون فشار اضافه
-بر CPU کار می‌کند؛ «قدرت» را همان عدد اسلایدر تعیین می‌کند، نه منابع سیستم.
+قابلیت‌های واقعی و قابل اندازه‌گیری:
+
+- **پایش زنده**: FPS، میانگین Frame Time، **1% Low**، بدترین فریم، مصرف Heap، بار پردازشی پروسه، تعداد Thread
+- **شمارش Stutter**: فریم‌های بالای ۵۰ میلی‌ثانیه شمارش می‌شوند
+- **پایش GC**: تعداد و مجموع زمان جمع‌آوری زباله + نمایش آخرین مکث GC
+- **پروفایل‌های آماده** (اعمال واقعی گزینه‌های بازی): **Battery / Balanced / Max FPS** — رندر دیستنس، سیمولیشن دیستنس، ذرات، فاصله رندر موجودیت‌ها، سایه‌روشن (AO)، ابرها، VSync و حداکثر FPS
+- **Auto-Optimizer**: اگر میانگین FPS زیر ۴۰ بیفتد، خودکار پروفایل Balanced اعمال می‌شود و اعلان می‌دهد
+- **Diagnostics & Benchmark**: صفحه گزارش کامل برای مقایسه‌ی قبل/بعد (تست‌ها را در شرایط یکسان خودت انجام بده — هیچ عدد ساختگی‌ای توسط مود گزارش نمی‌شود)
+
+### درباره‌ی GPU و VRAM
+
+کلاینت جاوا اطلاعاتی از VRAM/GPU ارائه نمی‌دهد و هر ابزاری که بدون کتابخانه native چنین ادعایی کند، ساختگی است. برای پایش GPU از NVIDIA Overlay (Alt+R) استفاده کن. بازنویسی موتور رندر در سطح Sodium خارج از محدوده‌ی این پروژه است.
+
+### سازگاری سرور
+
+- ماژول‌های Performance فقط مانیتورینگ و تنظیمات کلاینت‌اند؛ **هیچ پاکتی دست‌کاری نمی‌شود**
+- روی Vanilla / Paper / Spigot / Purpur / Fabric / Velocity کاملاً امن است
+- هیچ قابلیت دور زدن Anti-Cheat (GrimAC/Vulcan/...) وجود ندارد و اضافه نخواهد شد
+- موتور Fast Break فقط پیش‌بینی کلاینت است؛ سرور شکستن را با منطق خودش اعتبارسنجی می‌کند
 
 ## بیلد
 
-روی سیستم خودت (نیاز به JDK 25 برای بیلد):
+JDK 25 + Gradle 9.8.2:
 
 ```bash
-./gradlew build        # یا: gradle build
+gradle build
 ```
 
-خروجی: `build/libs/sepehr-fastbreak-1.0.0.jar` را در پوشه `mods` به‌همراه **Fabric API** بگذار.
+خروجی: `build/libs/sepehr-fastbreak-2.0.0.jar` — به‌همراه **Fabric API** در پوشه `mods`.
 
-## بیلد خودکار با GitHub Actions
-
-پوش کردن این مخزن به GitHub به‌طور خودکار فایل JAR را می‌سازد؛ سپس از بخش **Actions → Build
-SEPEHR FAST BREAK** فایل آرتیفکت را دانلود کن.
-
-## درباره «مخفی بودن کد»
-
-بیتی‌کُد جاوا عملاً قابل دی‌کامپایل است و مبهم‌سازی (Obfuscation) روی مادهای Fabric معمولاً
-باعث خرابی در حین remap شدن لودر می‌شود؛ برای همین کد این مود عمداً خوانا نگه داشته شده.
-در ضمن هیچ مبهم‌سازی‌ای رفتار مود را از Anticheat مخفی نمی‌کند — سرورهای دارای Anticheat
-معمولاً Fast Break را تشخیص می‌دهند و می‌توانند اکانت را بن کنند. این مود را فقط سروِرهایی
-استفاده کن که این رفتار در آن‌ها مجاز است (مثل سرورهای Anarchy یا سروِر شخصی).
+نسخه‌های کامپایل‌شده در پوشه [`dist`](dist/) هم قرار می‌گیرند.
 
 ## ساختار پروژه
 
 ```
-src/main/java/com/sepehr/fastbreak/
-    SepehrFastBreak.java        ← نقطه ورود و موتور Fast Break
-    FastBreakConfig.java        ← ذخیره/بارگذاری تنظیمات (JSON)
-    FastBreakConfigScreen.java  ← منوی تنظیمات داخل بازی
-src/main/resources/
-    fabric.mod.json             ← شناسنامه مود
-    assets/sepehrfastbreak/lang/ ← متن‌های فارسی و انگلیسی
+com.sepehr.fastbreak/
+    SepehrFastBreak.java          ← نقطه ورود، کلیدها، HUD
+    FastBreakEngine.java          ← موتور Fast Break
+    FastBreakConfigScreen.java    ← منوی Fast Break
+    FastBreakConfig.java          ← تنظیمات
+    perf/
+        FrameTimeTracker.java     ← اندازه‌گیری فریم و 1% Low
+        SystemMonitor.java        ← Heap/CPU/GC/Thread
+        PerfProfile.java          ← پروفایل‌های Battery/Balanced/MaxFPS
+        PerfWatchdog.java         ← Auto-Optimizer
+    gui/
+        PerfControlScreen.java    ← پنل کنترل عملکرد
+        PerfDiagnosticsScreen.java← عیب‌یابی و بنچمارک
 ```

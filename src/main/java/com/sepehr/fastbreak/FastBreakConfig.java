@@ -21,6 +21,10 @@ public class FastBreakConfig {
 
     public boolean enabled = true;
     public boolean showHud = true;
+    public boolean perfHud = true;
+    public boolean autopilot = true;
+    public boolean stutterAlerts = true;
+    public boolean autopilotApplied;
     public int power = 10;
 
     public static FastBreakConfig get() {
@@ -43,6 +47,7 @@ public class FastBreakConfig {
             SepehrFastBreak.LOGGER.error("Failed to read config, using defaults", e);
         }
         clamp(config);
+        config.autopilotApplied = false;
         instance = config;
     }
 
