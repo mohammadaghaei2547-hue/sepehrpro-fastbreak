@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public class FastBreakConfig {
 
     public static final int MIN_POWER = 1;
-    public static final int MAX_POWER = 50;
+    public static final int MAX_POWER = 100;
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path PATH = FabricLoader.getInstance().getConfigDir()
@@ -20,6 +20,7 @@ public class FastBreakConfig {
     private static FastBreakConfig instance;
 
     public boolean enabled = true;
+    public boolean showHud = true;
     public int power = 10;
 
     public static FastBreakConfig get() {

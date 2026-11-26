@@ -3,12 +3,14 @@ package com.sepehr.fastbreak;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,10 @@ import org.slf4j.LoggerFactory;
 public class SepehrFastBreak implements ClientModInitializer {
 
     public static final String MOD_ID = "sepehrfastbreak";
+    public static final String VERSION = "1.1.0";
     public static final Logger LOGGER = LoggerFactory.getLogger("SepehrFastBreak");
+
+    private static final BlockPos.Mutable CURSOR = new BlockPos.Mutable();
 
     private static KeyBinding menuKey;
 
@@ -33,41 +38,30 @@ public class SepehrFastBreak implements ClientModInitializer {
                 category
         ));
 
-        ClientTickEvents.END_CLIENT_TICK.register(SepehrFastBreak::onEndClientTick);
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (menuKey.wasPressed()) {
+                client.setScreen(new FastBreakConfigScreen(null));
+            }
+            FastBreakEngine.runTick(client, CURSOR);
+        });
 
-        LOGGER.info("SEPEHR FAST BREAK initialized. Default power: {}", FastBreakConfig.get().power);
+        HudElementRegistry.addLast(Identifier.of(SepehrFastBreak.MOD_ID, "status"),
+                (context, tickCounter) -> renderStatusHud(context));
+
+        LOGGER.info("SEPEHR FAST BREAK v{} initialized. Default power: {}",
+                VERSION, FastBreakConfig.get().power);
     }
 
-    private static void onEndClientTick(MinecraftClient client) {
-        while (menuKey.wasPressed()) {
-            client.setScreen(new FastBreakConfigScreen(null));
-        }
-        tickFastBreak(client);
-    }
-
-    private static void tickFastBreak(MinecraftClient client) {
+    private static void renderStatusHud(DrawContext context) {
         FastBreakConfig config = FastBreakConfig.get();
-        if (!config.enabled || config.power <= FastBreakConfig.MIN_POWER) {
+        if (!config.showHud || !config.enabled) {
             return;
         }
-        if (client.player == null || client.world == null || client.interactionManager == null) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null || client.options.hudHidden) {
             return;
         }
-        if (client.currentScreen != null) {
-            return;
-        }
-        if (!client.options.attackKey.isPressed()) {
-            return;
-        }
-        if (client.crosshairTarget == null || client.crosshairTarget.getType() != HitResult.Type.BLOCK) {
-            return;
-        }
-
-        BlockHitResult hit = (BlockHitResult) client.crosshairTarget;
-        int extraHits = Math.min(config.power, FastBreakConfig.MAX_POWER) - 1;
-
-        for (int i = 0; i < extraHits; i++) {
-            client.interactionManager.updateBlockBreakingProgress(hit.getBlockPos(), hit.getSide());
-        }
+        String line = "SEPEHR FAST BREAK: x" + config.power;
+        context.drawTextWithShadow(client.textRenderer, line, 6, 6, 0xFF55FF55);
     }
 }

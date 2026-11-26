@@ -3,7 +3,9 @@
   "key.category.sepehrfastbreak.main": "سپهر فست بریک",
   "screen.sepehrfastbreak.title": "سپهر فست بریک",
   "screen.sepehrfastbreak.power": "قدرت ماین: %s",
-  "screen.sepehrfastbreak.toggle": "وضعیت: %s",
+  "screen.sepehrfastbreak.toggle": "فست بریک: %s",
+  "screen.sepehrfastbreak.hud": "نمایش وضعیت: %s",
+  "screen.sepehrfastbreak.hint": "کلید چپ را روی بلوک نگه دار تا با تمام سرعت بکنی",
   "screen.sepehrfastbreak.on": "روشن",
   "screen.sepehrfastbreak.off": "خاموش"
 }

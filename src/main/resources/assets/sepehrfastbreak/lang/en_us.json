@@ -3,7 +3,9 @@
   "key.category.sepehrfastbreak.main": "SEPEHR FAST BREAK",
   "screen.sepehrfastbreak.title": "SEPEHR FAST BREAK",
   "screen.sepehrfastbreak.power": "Mining Power: %s",
-  "screen.sepehrfastbreak.toggle": "Status: %s",
+  "screen.sepehrfastbreak.toggle": "Fast Break: %s",
+  "screen.sepehrfastbreak.hud": "HUD Status: %s",
+  "screen.sepehrfastbreak.hint": "Hold left click on a block to mine at full speed",
   "screen.sepehrfastbreak.on": "ON",
   "screen.sepehrfastbreak.off": "OFF"
 }
