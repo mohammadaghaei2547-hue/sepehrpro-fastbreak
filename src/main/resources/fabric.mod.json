@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "sepehrfastbreak",
+  "version": "${version}",
+  "name": "SEPEHR FAST BREAK",
+  "description": "Ultra fast block breaking with an in-game power settings menu. Client-side mod for Fabric 1.21.11.",
+  "authors": [
+    "Sepehr"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.sepehr.fastbreak.SepehrFastBreak"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
