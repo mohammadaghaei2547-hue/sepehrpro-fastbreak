@@ -2,7 +2,7 @@ package com.sepehr.fastbreak.perf;
 
 import net.minecraft.client.option.CloudRenderMode;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.ParticlesMode;
+import net.minecraft.particle.ParticlesMode;
 
 public enum PerfProfile {
 

@@ -9,6 +9,10 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.render.RenderTickCounter;
+import com.sepehr.fastbreak.gui.PerfControlScreen;
+import com.sepehr.fastbreak.perf.PerfWatchdog;
+import com.sepehr.fastbreak.perf.SystemMonitor;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
